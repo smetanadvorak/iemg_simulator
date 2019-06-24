@@ -1,2 +1,3 @@
-/simulation_output
-!/simulation_output/.gitkeep
+.DS_Store
+simulation_output/*
+!simulation_output/.gitkeep
