@@ -7,8 +7,7 @@
 % This script loads the dataset for intent estimator training and
 % evaluation. 
 
-% 1) Set the dataset_path, it should contain one file:
-% virtual_subject_mdl.mat; and two folders: train_data and test_data
+% 1) Set the dataset_path, it should contain two folders: train_data and test_data
 
 % 2) Test/train data folders each contain a number of folders with
 % contraction trials;
@@ -18,30 +17,19 @@
 % affect the next trial in any way. 
 
 % 4) Each trial folder contains at least these files:
-% simulation_signals.mat with EMGSIGNAL and AUXSIGNAL structures
-% sim_annotation_centered_detectable.ann with the decomposition
-% and sim_annotation_centered_full.ann with full annotation (used only for
-% visualization).
+% {anyname}.mat with EMGSIGNAL and AUXSIGNAL structures
+% {anyname}.ann with the decomposition
 
-%dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/simulated/physiological/data_for_estimator_tests';
-dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/simulated/physiological/virtual_subject_test2';
-
-vs_mdl_file = 'simulation_mdl.mat';
-signals_file = 'simulation_signals.mat';
-annotation_file = 'sim_annotation_centered_full.ann';
+dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/ls2n/Proj_FDI_angle/FDI_Konstantin_constant_dynamic_adapted_for_estimator';
 training_path = 'training_data';
 testing_path = 'testing_data';
 
-%cd(fileparts(mfilename('fullpath')));
+signals_file = 'simulation_signals.mat';
+annotation_file = 'sim_annotation_centered_full.ann';
 current_path = pwd;
 
 try
-
 cd(dataset_path);
-load simulation_mdl;
-mf_mdl.init_quasistatic_e2f_f2e_models(mu_pool);
-%% Load the virtual subject model (optional)
-%load(vs_mdl_file);
 
 %% Load training data
 % Make list of trials in this folder
@@ -61,6 +49,7 @@ for d = 1:numel(dir_list)
     cd(dir_list{d});
     
     % Load the signal;
+    signals_file = getfield(dir('*.mat'), 'name');
     load(signals_file);
     fs = EMGSIGNAL.rate;
     fe_train_emg = EMGSIGNAL.data;
@@ -69,22 +58,23 @@ for d = 1:numel(dir_list)
     
     % Load the full annotation to extract maximal excitation (only for
     % simulated data !)
+    annotation_file = getfield(dir('*.ann'), 'name');
     fe_firings = ann2firings(annotation_file, fs);
-    fe_firings{mu_pool.N+1} = []; fe_firings(mu_pool.N+1) = []; % Go up to the number of motor neurons
+    %fe_firings{numel(fe_firings)} = [];
     fe_spikes = firings2spikes(fe_firings, length(fe_train_emg));
         
     % Append to dataset
     train_emg = [train_emg; zeros(fe_min_pause * fs, size(fe_train_emg,2)); fe_train_emg];
     train_aux = [train_aux; zeros(fe_min_pause * fs, size(fe_train_aux,2)); fe_train_aux];
-    train_spk = [train_spk; zeros(fe_min_pause * fs, size(fe_spikes,2)); fe_spikes];
-    train_true_fr = 
+    
+    train_spk = [train_spk, zeros(size(train_spk,1), size(fe_spikes,2) - size(train_spk,2))];
+    train_spk = [train_spk; zeros(fe_min_pause * fs, size(train_spk,2))];
+    train_spk = [train_spk; fe_spikes, zeros(size(fe_spikes,1), size(train_spk,2) - size(fe_spikes,2))];
     cd ..;
 end
 
-train_spk = train_spk(:, detectable_ind);
 max_active_mu = find(any(fe_spikes), 1, 'last');
-max_excitation = ( mu_pool.mn_pool.rt(max_active_mu) + mu_pool.mn_pool.rt(min(mu_pool.N, max_active_mu+1)) )/2;
-active_ind = detectable_ind(mu_pool.mn_pool.rt(detectable_ind) < max_excitation);
+
 MEC = max(train_aux); % Maximal estimable contraction;
 
 cd ..
@@ -106,6 +96,7 @@ for d = 1:numel(dir_list)
     cd(dir_list{d});
     
     % Load the signal;
+    signals_file = getfield(dir('*.mat'), 'name');
     load(signals_file);
     fs = EMGSIGNAL.rate;
     fe_test_emg = EMGSIGNAL.data;
@@ -114,21 +105,24 @@ for d = 1:numel(dir_list)
     
     % Load the full annotation to extract maximal excitation (only for
     % simulated data !)
+    annotation_file = getfield(dir('*.ann'), 'name');
     fe_firings = ann2firings(annotation_file, fs);
-    fe_firings{mu_pool.N+1} = []; fe_firings(mu_pool.N+1) = []; % Go up to the number of motor neurons
+    %fe_firings{numel(fe_firings)} = [];
     fe_spikes = firings2spikes(fe_firings, length(fe_test_emg));
         
     % Append to dataset
     test_emg = [test_emg; zeros(fe_min_pause * fs, size(fe_test_emg,2)); fe_test_emg];
     test_aux = [test_aux; zeros(fe_min_pause * fs, size(fe_test_aux,2)); fe_test_aux];
-    test_spk = [test_spk; zeros(fe_min_pause * fs, size(fe_spikes,2)); fe_spikes];
+    
+    test_spk = [test_spk, zeros(size(test_spk,1), size(fe_spikes,2) - size(test_spk,2))];
+    test_spk = [test_spk; zeros(fe_min_pause * fs, size(test_spk,2))];
+    test_spk = [test_spk; fe_spikes, zeros(size(fe_spikes,1), size(test_spk,2) - size(fe_spikes,2))];
    
     cd('..');
 end
 
-test_spk = test_spk(:, detectable_ind);
 fprintf("\nTraining/Testing data loading complete! \n");
-
+fsl = 64;
 catch err
     fprintf("\nLoading data failed!");
     cd(current_path);

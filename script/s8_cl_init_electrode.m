@@ -7,13 +7,13 @@
 % electrode.set_linear_trajectory(0, 1); %Static
 
 % One-step scanning array
-electrode = IntramuscularArray(16, 1, 'consecutive');
-electrode.set_position([-Rmuscle,0,Lmuscle/2+5], [-pi/6, 0, -pi/2]); 
-electrode.set_linear_trajectory(1, 1); %One-step pull out
+%electrode = IntramuscularArray(16, 1, 'consecutive');
+%electrode.set_position([-Rmuscle,0,Lmuscle/2+5], [-pi/6, 0, -pi/2]); 
+%electrode.set_linear_trajectory(1, 1); %One-step pull out
 
-% Differential electrode
-%electrode = IntramuscularArray(2, 1);
-%electrode.set_position([-2.5,0,2*Lmuscle/3], [-pi/2,0,-pi/2]);
+% Single channel differential electrode
+electrode = IntramuscularArray(2, 1);
+electrode.set_position([-2.5,0,2*Lmuscle/3], [-pi/2,0,-pi/2]);
 
 % Scanning electrode
 %electrode = IntramuscularArray(2, 1);

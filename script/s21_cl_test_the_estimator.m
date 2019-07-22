@@ -1,6 +1,29 @@
 %% If needed, set exact simulation parameters to the estimator
 plot_criterion = 1;
 
+%% Downsample the testing data
+downsampler_aux.reset();
+downsampler_spk.reset();
+downsampler_act.reset();
+
+test_aux_dwns = zeros(size(test_aux));
+test_act_dwns = zeros(size(test_spk));
+test_spk_dwns  = zeros(size(test_spk));
+test_act = spikes2activity(test_spk, length(fe_window)/fsl*fs, 1);
+
+for t = 1:size(test_spk,1)
+    test_aux_dwns(t) = downsampler_aux.update(test_aux(t));
+    test_act_dwns(t,:) = downsampler_act.update(test_act(t,:));
+    test_spk_dwns(t,:) = downsampler_spk.update(test_spk(t,:));
+end
+
+test_aux_dwns(isnan(test_aux_dwns(:,1)),:) = [];
+test_act_dwns(isnan(test_act_dwns(:,1)),:) = [];
+test_spk_dwns(isnan(test_spk_dwns(:,1)),:) = [];
+
+test_act_dwns = double(test_act_dwns > 0);
+test_spk_dwns = double(test_spk_dwns > 0);
+
 % Calculate firing rates
 test_fr_dwns = zeros(size(test_spk_dwns));
 for m = 1:size(test_spk_dwns,2)
@@ -52,47 +75,48 @@ switch estimator.type
         end        
 end
 
-test_predicted = interp1(test_predicted_dwns, linspace(0,length(test_predicted_dwns), length(test_predicted_dwns)/fsl*fs)');
+test_predicted = interp1(test_predicted_dwns, linspace(0, length(test_predicted_dwns), length(test_aux))');
 fe_R2_test = 1-var(test_aux - test_predicted)/var(test_aux);
 fprintf(' Done!\n');
 
 %% Plot the test results
 figure; 
+%plot(test_timeline_dwns, test_fr_dwns, '-');
+%legend('Observation', 'Predicted', 'Rates');
+
+% Plot spikes
+% yyaxis right
+% plot(test_timeline, test_spk .* repmat(1:size(test_spk,2), size(test_spk,1), 1), 'o')
+% ylim([0.5, 0.5 + find(any(test_spk), 1, 'last')]);
+% set(gca, 'ytick', []);
+% legend('Observation', 'Predicted', 'Spikes');
+
+% Plot firing rates
+yyaxis right
 test_timeline = (1:length(test_aux))/fs;
 test_timeline_dwns = (1:length(test_aux_dwns))/fsl;
 plot(test_timeline, test_aux, 'k', 'linewidth',2); hold on; 
 plot(test_timeline, test_predicted,'g', 'linewidth',2);
 xlabel('Time, s'); ylabel('Force, normalized'); axis tight
 
-% Plot spikes
-% yyaxis right
-% plot(test_timeline, test_spikes .* repmat(1:size(test_spikes,2), size(test_spikes,1), 1), 'o')
-% ylim([0.5, 0.5 + find(any(test_spikes), 1, 'last')]);
-% set(gca, 'ytick', []);
-% legend('Observation', 'Predicted', 'Spikes');
-
-% Plot firing rates
-yyaxis right
-plot(test_timeline_dwns, test_fr_dwns, '-');
-legend('Observation', 'Predicted', 'Rates');
 
 %% Plot criterion
 %crit_inds = conv(sum(test_act_dwns, 2) == 0, ones(51,1), 'same') > 0;
 if plot_criterion
     figure; 
-    crit_hist_viz = -log(crit_hist);
+    crit_hist_viz = log(crit_hist);
     
     % Plot criterion
-    [X,Y] = meshgrid(crit_nodes(crit_nodes_inds), (1:length(test_aux_dwns))'/fsl);
+    [X,Y] = meshgrid(crit_nodes, (1:length(test_aux_dwns))'/fsl);
     mesh(X, Y, crit_hist_viz, 'facealpha',0.5); hold on
     
-    %Plot criterion maximal points
-    [crit_maxs, max_inds] = max(crit_hist_viz,[],2);
-    plot3(crit_nodes(max_inds), (1:length(test_aux_dwns))'/fsl, crit_maxs, 'r*');
+    % Plot criterion maximal points
+    [crit_mins, min_inds] = min(crit_hist_viz,[],2);
+    plot3(crit_nodes(min_inds), (1:length(test_aux_dwns))'/fsl, crit_mins, 'r*');
     ylabel('Time, s'); xlabel('Effect $e$, normalized'); zlabel('$\log C_I$')
 end
 
-clear plot_criterion X Y
+clear X Y
 
 %%
 %clear signals_file annotation_file fe_* clear EMGSIGNAL AUXSIGNAL current_path

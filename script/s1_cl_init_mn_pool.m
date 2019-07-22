@@ -1,5 +1,5 @@
 
-N = 100; %Number of mus
+N = 120; %Number of mus
 rr = 50; %Recruitment range: largest/smallest
 rm = 0.75; %Recruitment maximum (when all the MUs are active)
 Rmuscle = 5; %[mm]
