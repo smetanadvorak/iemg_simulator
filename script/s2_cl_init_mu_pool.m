@@ -4,14 +4,6 @@
 % init - kind of generate, but if its called the first for a new object.
 % calc - calculate new data as a transformation of a previously generated data.
 
-
-
-%% Muscle geometry
-% Everything is in millimeters. Muscle in vicinity of the electrode is approximated as a cylinder with
-Lmuscle = 50; % [mm]
-Dmf = 400; % Density of muscle fibers per square millimetre (Hamilton-Wright 2005)
-Nmf = round((Rmuscle^2) * pi * Dmf); % Expected number of muscle fibers in the muscle. 
-
 %% 
 mu_pool = MU_Pool_Sim(mn_pool);
 clear mn_pool

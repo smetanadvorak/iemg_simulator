@@ -39,8 +39,7 @@ plot(qsi_force, mf_mdl.f2e(qsi_force), 'b', 'linewidth', 2);
 xlim([0,1]); ylim([0,1]);
 ylabel('Excitation');
 xlabel('Force, normalized');
-%title('Force response to quasistatic linearly increasing excitation and its polynomial fit');
-legend('Simulated excitation-force dependency', 'Weightened 5-th order polynomial fit', 'location', 'nw');
-
+title('Force response to quasistatic linearly increasing excitation and its polynomial fit');
+legend('Simulated excitation-force dependency', 'Weightened 5-order polynomial fit', 'location', 'nw');
 
 %clear qsi_force qsi_excitation qsi_T qsi_spikes

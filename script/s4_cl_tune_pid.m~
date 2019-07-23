@@ -64,7 +64,7 @@ figure;
 plot(pid_valid_data_r.SamplingInstants, pid_ident_data_r.OutputData); hold all;
 pid_pred = predict(e2fModel, pid_ident_data_r, 0);
 plot(pid_valid_data_r.SamplingInstants, pid_pred.y, '--r');
-xlim([-inf, inf]); ylim([0, 1.2]); xlabel('Time, s'); ylabel('Force, normalized');
+xlim([-inf, inf]); ylim([]); xlabel('Time, s'); ylabel('Force, normalized');
 legend('Validation ouput', 'Estimated model output'); 
 
 %% Set up and tune the PID controller

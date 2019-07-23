@@ -191,11 +191,13 @@ classdef MuscleForceMdl < handle
             qsi_spikes = mu_pool.mn_pool.generate_spike_train_gauss(1:qsi_T, nan(mu_pool.mn_pool.N,1), qsi_excitation, obj.hfs);
             qsi_force = obj.generate_force_offline(qsi_spikes);
             
-            % Invert the curve, get polynomial interpolation that passes through zero
-            obj.qs_f2e_mdl = [qsi_force.^4, qsi_force.^3, qsi_force.^2, qsi_force.^1]\qsi_excitation;
+            % Invert the curve, get weightened polynomial interpolation that passes through zero
+            w = 1.25-qsi_excitation;
+
+            obj.qs_f2e_mdl = (w.*[qsi_force.^5, qsi_force.^4, qsi_force.^3, qsi_force.^2, qsi_force.^1])\(w.*qsi_excitation);
             obj.qs_f2e_mdl = [obj.qs_f2e_mdl; 0];
             
-            obj.qs_e2f_mdl = [qsi_excitation.^4, qsi_excitation.^3, qsi_excitation.^2, qsi_excitation.^1]\qsi_force;
+            obj.qs_e2f_mdl = (w.*[qsi_excitation.^5, qsi_excitation.^4, qsi_excitation.^3, qsi_excitation.^2, qsi_excitation.^1])\(w.*qsi_force);
             obj.qs_e2f_mdl = [obj.qs_e2f_mdl; 0];
         end
         
