@@ -7,6 +7,7 @@ branch_v = [5000, 2000]; % NMJ branch conduction velocity; [mm/s]
 
                          
                          
+                         
 %% MUs objects initialization
 if ~exist('MUs', 'var')
     MUs(N) = MU_Sim;
@@ -18,9 +19,10 @@ for i = 1:N
     
     MUs(i).nominal_center = mu_pool.mn_pool.centers(i,:);
 end
-
-
 clear branch_v
+
+
+
 
 %% Generate neuromuscular junction coordinates distribution (Make this a method of MU pool)
 endplate_area_center = Lmuscle/2;
@@ -38,7 +40,8 @@ end
 
 
 
-%% Calculate MUs sfaps
+
+%% Calculate MUs sfaps (takes ~cup-of-tea time)
 for i = 1:N
     MUs(i).calc_sfaps(dt, dz, electrode.pts, electrode.normals);
     fprintf('%d sfaps generated\n', i);
@@ -46,10 +49,12 @@ end
 
 
 
+
 %% Calculate MUAP templates (no jitter)
 for i = 1:N
     MUs(i).calc_muap(0);
 end
+
 
 
 
@@ -93,6 +98,8 @@ clear muap_to_plot muap_to_add timeline ax ind i j side
 
 
 
+
+
 %% Plot neuromuscular junctions z-coordinates distribtions
 figure; ax =[]; set(gcf, 'Name', 'NMJ Z Coordinates Distribution, mm');
 side = ceil(sqrt(N));
@@ -111,6 +118,9 @@ end
 clear ax side i j ind 
 
 
+
+
+
 %% Plot axon branch lengths distribution
 figure; ax =[]; set(gcf, 'Name', 'Branch Length Distribution, mm');
 side = ceil(sqrt(N));
@@ -123,6 +133,10 @@ for i = 1:side
     end
 end
 clear side ind i j
+
+
+
+
 
 %% Plot axon propagation delays distribution
 figure; ax =[]; set(gcf, 'Name', 'NMJ Delays Distribution, ms');
@@ -139,12 +153,14 @@ for i = 1:side
         end
     end
 end
-
 figure; histogram(global_delays); 
 xlabel('Delays between axon and it''s neuromuscular junctions, ms');
 ylabel('Histogram of delays');
 
 clear global_delays ind ax i j side
+
+
+
 
 
 %% MUs' visibility by the electrode 
@@ -194,8 +210,8 @@ xlabel('MUs'); ylabel('mm');
 %     end
 % end
 
-
 clear ampls r pt dists fibers_distance sum_sfaps ch
+
 
 
 
@@ -217,6 +233,7 @@ legend('Original MUAP', '20 APs with jitter');
 xlabel('Time, ms'); ylabel('Amplitude, arbitrary units');
 
 clear  muap_to_plot timeline n_to_plot
+
 
 
 

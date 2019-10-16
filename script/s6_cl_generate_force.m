@@ -1,3 +1,6 @@
+% Generate force according to the specified profile. Simulates the
+% contraction and outputs the spike trains for this contraction.
+
 spikes = zeros(profile.T, mu_pool.N);
 ipi = zeros(profile.T,mu_pool.N);
 force = zeros(profile.T,1);

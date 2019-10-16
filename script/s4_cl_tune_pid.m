@@ -1,3 +1,4 @@
+%% Generate the identification and validation data for the excitation-force model.
 sys_T = 32*fs;
 
 sys_pseudorandom_input = multilevel_prbs(sys_T, fs/2, 1);
@@ -11,7 +12,7 @@ sys_valid_excitation(1:round(fs/2)) = 0;
 sys_timeline = linspace(0,numel(sys_ident_excitation)/fs, numel(sys_ident_excitation));
 
 clear l_input 
-%% Generate identification and validation input
+%% Generate identification and validation spike trains 
 sys_ident_spikes = mu_pool.mn_pool.generate_spike_train_gauss(1:sys_T, nan(mu_pool.N,1), sys_ident_excitation, fs);
 sys_valid_spikes = mu_pool.mn_pool.generate_spike_train_gauss(1:sys_T, nan(mu_pool.N,1), sys_valid_excitation, fs);
 
@@ -50,7 +51,7 @@ sys_valid_data.OutputUnit = 'Normalized';
 sys_ident_data_r = resample(sys_ident_data, 1, round(fs/fsl));
 sys_valid_data_r = resample(sys_valid_data, 1, round(fs/fsl));
 
-%% Estimate the plant model
+%% Estimate the plant (excitation-force) model
 
 %e2fModel = arx(detrend(pid_ident_data),[2 1 75/1000 * fs]);
 %e2fModel = oe(detrend(pid_ident_data),[1 2 75/1000 * fs]);

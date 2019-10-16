@@ -1,5 +1,5 @@
 
-%% Set the electrode
+%% Set up the electrode (uncomment one of the choices below)
 
 % End-to-end array
 % electrode = IntramuscularArray(11, 1, 'consecutive');
@@ -25,7 +25,15 @@ electrode.set_linear_trajectory(0.125, 4);
 %electrode.set_position([-Rmuscle,0,2*Lmuscle/3], [-pi/2, 0, -pi/2]); 
 %electrode.set_linear_trajectory(2*Rmuscle-1, 19);
 
-%% Plot muscle and territories
+
+
+
+
+
+
+
+
+%% Plot muscle and the electrode
 x_circle = linspace(-Rmuscle, Rmuscle, 1000); y_circle = sqrt(Rmuscle^2 - x_circle.^2);
 x_circle = [x_circle, x_circle(end:-1:1)]; y_circle = [y_circle, -y_circle(end:-1:1)];
 figure(); set(gcf, 'position', [192  117 1260 761]);

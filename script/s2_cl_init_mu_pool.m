@@ -5,27 +5,27 @@
 % calc - calculate new data as a transformation of a previously generated data.
 
 %% 
-mu_pool = MU_Pool_Sim(mn_pool);
+mu_pool = MU_Pool_Sim(mn_pool); % Initialize the MU_Pool object with motor neuron pool
 clear mn_pool
 
 %% Generate MFs
-mu_pool.generate_mfs(Rmuscle, Dmf);
+mu_pool.generate_mfs(Rmuscle, Dmf); 
 mu_pool.show_mf_centers();
 
-%% Innervation Area
+%% Calculate theoretical innervation areas for MNs
 overlap_degree = mu_pool.calc_innervation_areas();
 
-%% Innervation Numbers
+%% Calculate theoretical innervation numbers for MNs (number of fibers innervated by each MN)
 mu_pool.calc_innervation_numbers();
 
-%% Assign mfs to mns
-mu_pool.assign_mfs2mns(4);
+%% Assign MFs to MNs
+mu_pool.assign_mfs2mns(4); % Greater the parameter is, less the fibers of the same MU are allowed to be adjacent to each other. See the (Akhmadeev et al. 2019) paper, adjacency parameter.
 
+%% Show results of innervation
+mu_pool.calc_innervation_numbers_res(); 
 
-%% Show results for innervation
-mu_pool.calc_innervation_numbers_res();
-
-mu_pool.calc_innervation_areas_res('polygone_area', 0.95); %'root_variance'; %'confidence_ellipse'; 'polygone_area'; 
+mu_pool.calc_innervation_areas_res('polygone_area', 0.95); % Parameter defines the way the resulting innervation area is calculated.
+                                                           %'root_variance'; %'confidence_ellipse'; 'polygone_area'; 
 
 mu_pool.show_innervation_numbers();
 mu_pool.show_innervation_areas_1d();

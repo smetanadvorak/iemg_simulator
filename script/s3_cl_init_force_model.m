@@ -1,4 +1,4 @@
-%% Create a muscle model object
+%% Create a muscle model object, generate twitches according to Fuglevand 1993.
 mf_mdl = MuscleForceMdl(mu_pool.mn_pool.N, mu_pool.mn_pool.rr, fs);
 mf_mdl.plot_twitches();
 
