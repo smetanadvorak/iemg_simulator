@@ -31,7 +31,6 @@ if electrode.n_channels == 1
     %% Reconstruct it
     reconstructed_for_decomp_full = conv_trains_muaps(spikes_for_decomp_full, dictionary_for_decomp_full, 'causal');
     reconstructed_for_decomp_detectable = conv_trains_muaps(spikes_for_decomp_detectable, dictionary_for_decomp_detectable, 'causal');
-    
      
     
     figure; set(gcf, 'position', [70, 100, 1300, 600]);

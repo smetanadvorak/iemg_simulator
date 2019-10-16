@@ -84,36 +84,42 @@ figure;
 %plot(test_timeline_dwns, test_fr_dwns, '-');
 %legend('Observation', 'Predicted', 'Rates');
 
-% Plot spikes
-% yyaxis right
-% plot(test_timeline, test_spk .* repmat(1:size(test_spk,2), size(test_spk,1), 1), 'o')
-% ylim([0.5, 0.5 + find(any(test_spk), 1, 'last')]);
-% set(gca, 'ytick', []);
-% legend('Observation', 'Predicted', 'Spikes');
+
 
 % Plot firing rates
-yyaxis right
 test_timeline = (1:length(test_aux))/fs;
 test_timeline_dwns = (1:length(test_aux_dwns))/fsl;
 plot(test_timeline, test_aux, 'k', 'linewidth',2); hold on; 
 plot(test_timeline, test_predicted,'g', 'linewidth',2);
 xlabel('Time, s'); ylabel('Force, normalized'); axis tight
+legend('True', 'Estimated');
+
+% Plot spikes
+yyaxis right
+plot(test_timeline, test_spk .* repmat(1:size(test_spk,2), size(test_spk,1), 1), '.')
+%plot(test_timeline, test_spk .* repmat(estimator.pars(:,1)', size(test_spk,1), 1), '.')
+ylim([0.5, 0.5 + find(any(test_spk), 1, 'last')]);
+ylabel('Motor neuron');
+%set(gca, 'ytick', []);
+legend('Observation', 'Predicted', 'Spikes');
 
 
 %% Plot criterion
 %crit_inds = conv(sum(test_act_dwns, 2) == 0, ones(51,1), 'same') > 0;
 if plot_criterion
     figure; 
-    crit_hist_viz = log(crit_hist);
-    
+    crit_hist_viz = -log(1+crit_hist);
+    crit_hist_viz(any(diff(test_act_dwns),2),:)=nan;
     % Plot criterion
-    [X,Y] = meshgrid(crit_nodes, (1:length(test_aux_dwns))'/fsl);
-    mesh(X, Y, crit_hist_viz, 'facealpha',0.5); hold on
+    [X,Y] = meshgrid((1:length(test_aux_dwns))'/fsl, crit_nodes);
+    mesh(X, Y, crit_hist_viz', 'facealpha',0.85); hold on
     
     % Plot criterion maximal points
-    [crit_mins, min_inds] = min(crit_hist_viz,[],2);
-    plot3(crit_nodes(min_inds), (1:length(test_aux_dwns))'/fsl, crit_mins, 'r*');
-    ylabel('Time, s'); xlabel('Effect $e$, normalized'); zlabel('$\log C_I$')
+    [crit_mins, min_inds] = max(crit_hist_viz,[],2);
+    %plot3((1:length(test_aux_dwns))'/fsl, crit_nodes(min_inds), crit_mins, 'r.', 'markersize', 15);
+    plot3(test_timeline, test_predicted, 0.15*ones(size(test_timeline)), 'linewidth',3, 'color', 'g');
+    plot3(test_timeline, test_aux, 0.05*ones(size(test_timeline)), 'linewidth',3, 'color', 'k');
+    xlabel('Time, s'); ylabel('Effect $e$, normalized'); zlabel('$-\log C_I$'); 
 end
 
 clear X Y

@@ -14,7 +14,7 @@
 % MUAP's energy times the firing rate at recruitment.
 % Contribution is then calculated as percentage of that power in the total
 % power of the emg signal at that excitation level.
-total_explained_variance = 0.99;
+total_explained_variance = 0.95;
 over_noise = 6;
 
 recr_contribution = zeros(mu_pool.N,1);

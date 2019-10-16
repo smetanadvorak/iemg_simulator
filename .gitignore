@@ -1,3 +1,5 @@
 .DS_Store
 simulation_output/*
 !simulation_output/.gitkeep
+*.m~
+script/thesis_virtual_subject/*

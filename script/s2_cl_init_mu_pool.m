@@ -19,7 +19,7 @@ overlap_degree = mu_pool.calc_innervation_areas();
 mu_pool.calc_innervation_numbers();
 
 %% Assign mfs to mns
-mu_pool.assign_mfs2mns(5);
+mu_pool.assign_mfs2mns(4);
 
 
 %% Show results for innervation
@@ -29,7 +29,7 @@ mu_pool.calc_innervation_areas_res('polygone_area', 0.95); %'root_variance'; %'c
 
 mu_pool.show_innervation_numbers();
 mu_pool.show_innervation_areas_1d();
-mu_pool.show_innervation_areas_2d(randperm(mu_pool.N, 50));
+mu_pool.show_innervation_areas_2d(1:2:N); 
 title('');
 
 %% Generate diameters and conduction velocities

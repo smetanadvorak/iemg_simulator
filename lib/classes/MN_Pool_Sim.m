@@ -185,20 +185,21 @@ classdef MN_Pool_Sim < handle
              phi_circle = linspace(0, 2*pi, 1000)';
              phi_circle = phi_circle(1:end-1); 
              muscle_border = [Rmuscle * cos(phi_circle), Rmuscle * sin(phi_circle)];
-             plot(muscle_border(:,1), muscle_border(:,2), 'b', 'linewidth', 1.2); hold on;
+             plot(muscle_border(:,1), muscle_border(:,2), 'k', 'linewidth', 1); hold on;
             
             for i = 1:obj.N
-                text(obj.centers(i,1), obj.centers(i,2), num2str(i)); hold on;
+                text(obj.centers(i,1)-0.1, obj.centers(i,2), num2str(i)); hold on;
                 rad = sqrt(obj.sz(i)/sum(obj.sz) * pi * Rmuscle^2/pi);
                 mu_area_circle = [rad * cos(phi_circle) + obj.centers(i,1), ...
                     rad * sin(phi_circle) + obj.centers(i,2)];
                 
-                plot(mu_area_circle(:,1), mu_area_circle(:,2), 'k');
+                plot(mu_area_circle(:,1), mu_area_circle(:,2), 'b', 'linewidth', 0.5);
             end
             axis equal
-            title('Motor neuron innervation centers and areas over the muscle cross-section');
+            axis tight
+            %title('Motor neuron innervation centers and areas over the muscle cross-section');
             xlabel('x, mm'); ylabel('y, mm');
-            legend('Muscle border', 'Innervation areas');
+            %legend('Muscle border', 'Innervation areas');
         end
         
         function generate_exc_fr_curves(obj)
@@ -212,7 +213,7 @@ classdef MN_Pool_Sim < handle
             %end
         end
         
-        function show_fr_exc_curves(obj, ax, inds)
+        function pl = show_fr_exc_curves(obj, ax, inds)
             if nargin < 2 || isempty(ax)
                 figure;
                 ax = axes;
@@ -224,8 +225,8 @@ classdef MN_Pool_Sim < handle
             
             obj.generate_exc_fr_curves();
             exc = linspace(0,1,size(obj.exc_fr_curves,1))';
-            plot(exc, obj.exc_fr_curves(:,inds), 'linewidth', 1);
-            xlabel('Excitation, normalized'); ylabel('Firing rates, pps');
+            pl = plot(exc, obj.exc_fr_curves(:,inds), 'k', 'linewidth', 0.5);
+            xlabel('Excitation, normalized'); ylabel('Firing rates, pulses per second');
         end
         
     end

@@ -250,9 +250,9 @@ classdef MU_Pool_Sim < handle
             end
             plot(obj.innervation_areas); hold on;
             plot(obj.innervation_areas_res);
-            title('Innervation areas of the units and their target values');
+            %title('Innervation areas of the units and their target values');
             xlim([0.5,obj.N+0.5]); xlabel('Motor neuron'); ylabel('Innervation areas, $mm^2$');
-            legend('Target', 'Generated');            
+            legend('Target', 'Generated', 'location', 'nw');            
         end
         
         function hps = show_innervation_areas_2d(obj, inds, ax)
@@ -266,17 +266,17 @@ classdef MU_Pool_Sim < handle
             axis(ax);
             
             % Draw circle for muscle border
-            plot(ax, obj.muscle_border(:,1), obj.muscle_border(:,2), 'k', 'linewidth', 0.75); hold on;
+            plot(ax, obj.muscle_border(:,1), obj.muscle_border(:,2), 'k', 'linewidth', 1); hold on;
             hps = [];
             for m = 1:numel(inds)
                 assgn = find(obj.assignment == inds(m));
                 hull = convhull(obj.mf_centers(assgn,1), obj.mf_centers(assgn, 2));
-                hp = plot(obj.mf_centers(assgn(hull),1), obj.mf_centers(assgn(hull),2), '-', 'linewidth', 0.5); hold on;
-                %plot(obj.mf_centers(assgn,1), obj.mf_centers(assgn, 2), '.', 'MarkerSize', 3, 'Color', hp.Color); 
+                hp = plot(obj.mf_centers(assgn(hull),1), obj.mf_centers(assgn(hull),2), '-', 'linewidth', 0.75); hold on;
+                plot(obj.mf_centers(assgn,1), obj.mf_centers(assgn, 2), '.', 'MarkerSize', 0.1, 'Color', hp.Color); 
                 hps = [hps, hp]; 
             end
             for m = 1:numel(inds)
-                text(obj.mn_pool.centers(inds(m),1), obj.mn_pool.centers(inds(m),2), num2str(inds(m)), 'Color', hps(m).Color, 'fontsize', 7, 'linewidth',0.5, 'horizontalalignment', 'center');
+                %text(obj.mn_pool.centers(inds(m),1), obj.mn_pool.centers(inds(m),2), num2str(inds(m)), 'Color', hps(m).Color, 'fontsize', 7, 'linewidth',0.5, 'horizontalalignment', 'center');
             end
             
             axis equal
@@ -295,9 +295,9 @@ classdef MU_Pool_Sim < handle
             
             histogram(ax, obj.assignment, obj.N); hold on;
             plot(obj.innervation_numbers, 'r', 'linewidth', 1.5);
-            title('Number of fibers distribution accross the units and the target distribution');
+            %title('Number of fibers distribution accross the units and the target distribution');
             xlim([0.5,obj.N+0.5]); xlabel('Motor neuron'); ylabel('Number of fibers');
-            legend('Generated', 'Target');
+            legend('Generated', 'Target', 'location', 'nw');
         end
         
         function show_cv_distribution(obj, ax)
@@ -306,7 +306,7 @@ classdef MU_Pool_Sim < handle
                 ax = axes();
             end
             histogram(ax, obj.mf_cv); 
-            title('Global distribution of MF conduction velocities');
+            %title('Global distribution of MF conduction velocities');
         end
         
         function show_diameters_distribution(obj, ax)
@@ -314,15 +314,17 @@ classdef MU_Pool_Sim < handle
                 figure;
                 ax = axes();
             end
-            histogram(ax, obj.mf_diameters); 
+            histogram(ax, obj.mf_diameters * 10^6); 
             xlabel('Fiber diameters, $\mu$m');
             ylabel('Historgram of fiber diameters over the muscle');
-            [muhat, sigmahat] = normfit(obj.mf_diameters);
+            [muhat, sigmahat] = normfit(obj.mf_diameters * 10^6);
             hold on;
-            normfitx = linspace(min(obj.mf_diameters), max(obj.mf_diameters), 100);
-            plot(normfitx, sqrt(2*pi) * sigmahat * max(histcounts(obj.mf_diameters)) * normpdf(normfitx, muhat, sigmahat), 'linewidth', 1.5);
-            text(60, 600, ['$\mu$ = ', num2str(muhat)], 'fontsize', 20);
-            text(60, 550, ['$\sigma$ = ', num2str(sigmahat)], 'fontsize', 20);
+            normfitx = linspace(min(obj.mf_diameters * 10^6), max(obj.mf_diameters * 10^6), 100);
+            %plot(normfitx, sqrt(2*pi) * sigmahat * max(histcounts(obj.mf_diameters * 10^6)) * normpdf(normfitx, muhat, sigmahat), 'linewidth', 1.5);
+            plot(normfitx, sqrt(2*pi) * 9 * max(histcounts(obj.mf_diameters * 10^6)) * normpdf(normfitx, 55, 9), 'linewidth', 2);
+            text(70, 900, ['$\hat{\mu}$ = ', num2str(muhat)], 'fontsize', 20);
+            text(70, 800, ['$\hat{\sigma}$ = ', num2str(sigmahat)], 'fontsize', 20);
+            legend('Resulting distribution', 'Experimental distribution');
         end
     end
 end

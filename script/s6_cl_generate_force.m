@@ -31,7 +31,7 @@ for t = 1:profile.T-1
     
     if ~mod(sub_counter, round(fs/fsl))     
         % Error calculation for PID controller's input
-        sub_force(sub_t) = mean(force(t-fsl+1:t));
+        sub_force(sub_t) = mean(force(t-round(fs/fsl)+1:t));
         sub_error(sub_t) = profile.sub_profile(sub_t) - sub_force(sub_t); % Proportional error
         if profile.sub_profile(sub_t) > 0, int_err = int_err + sub_error(sub_t); else int_err = 0; end % Integrated error (supressed when no goal force)
         if sub_t > 1, der_err = sub_error(sub_t) - sub_error(sub_t-1); end % Local derivative of the error
@@ -71,31 +71,28 @@ end
 
 %% Plot goal force + resulting force, excitation and error
 figure; hold all; 
-plot(profile.timeline, profile.profile * 100, 'k'); 
-plot(profile.timeline, force * 100,'g'); 
-plot(profile.timeline, error * 100, 'r');
-
-plot(profile.sub_timeline, sub_error * 100, 'r.', 'linestyle', 'none');
-plot(profile.sub_timeline, sub_force * 100, 'g.', 'linestyle', 'none');
+plot(profile.timeline, force * 100,'g', 'linewidth', 1.5); 
+plot(profile.timeline, error * 100, 'r', 'linewidth', 1);
+plot(profile.timeline, profile.profile * 100, 'b--', 'linewidth', 1); 
 
 ylabel('Force, \%MVC');
 xlabel('Time, s');
-legend('Goal force', 'Resulting force', 'Error');%, 'Resulting excitation');
+legend('Resulting force', 'Error', 'Goal force');%, 'Resulting excitation');
 
 
 %% Plot resulting spikes
-firings = spikes2firings(spikes);
-figure;
-for m = 1:length(firings)
-    indices = firings{m}/fs;
-    separator = repmat(m, length(indices), 1);
-    plot(indices, separator, 'ko'); hold on;
-end
-ylabel('Motor neuron index');
-yyaxis right;
-plot(profile.timeline, excitation, 'linewidth', 2);
-ylabel('Excitation, normalized units');
-xlabel('Time, sec');
-title('Motor neurons'' firining times and excitation vs time');
+% firings = spikes2firings(spikes);
+% figure;
+% for m = 1:length(firings)
+%     indices = firings{m}/fs;
+%     separator = repmat(m, length(indices), 1);
+%     plot(indices, separator, 'ko'); hold on;
+% end
+% ylabel('Motor neuron index');
+% yyaxis right;
+% plot(profile.timeline, excitation, 'linewidth', 2);
+% ylabel('Excitation, normalized units');
+% xlabel('Time, sec');
+% title('Motor neurons'' firining times and excitation vs time');
 
-clear t m twitch_to_add to_take gain int_err der_err sub_* Kd Kp Ki int_err der_err prev_neuron_state
+%clear t m twitch_to_add to_take gain int_err der_err sub_* Kd Kp Ki int_err der_err prev_neuron_state

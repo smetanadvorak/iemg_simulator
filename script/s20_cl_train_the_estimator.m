@@ -2,33 +2,21 @@
 % the feature extracture (activity, firing rates) outside of them (like
 % now)
 
-%% Use training data or set exact parameters to the estimator
-set_exact_estimator_parameters = 1;
-
-if fs == 10240
-    fsl = 128;
-else
-    fsl = 100;
-end
-
 %% Define the model type, configure it
 fe_training_lag = round(75/1000*fsl);
 fe_inference_lag = round(1/1000*fsl);
 fe_window = ones(ceil(250/1000*fsl), 1); 
-fe_window = gausswin(ceil(250/1000*fsl), 1); 
+%fe_window = gausswin(ceil(250/1000*fsl), 1); 
 fe_window = fe_window./sum(fe_window);
 
 %% Define effect estimator
 %estimator = PC_CDR_online(fe_window, fe_training_lag, fe_inference_lag);
-%estimator = PC_RS_online(fe_training_lag, fe_inference_lag);
+%estimator = PC_RS_online(fe_training_lag, fe_inference_lag); 
+estimator.dist_type = 'logistic';
 %estimator = PC_RC_online('deluca', fe_training_lag, fe_inference_lag);
 estimator = PC_RSRC_online(fe_training_lag, fe_inference_lag);
 clear fr_estimator
 
-%% Define downsamplers
-downsampler_aux = Downsampler(fs/fsl);
-downsampler_spk = Downsampler(fs/fsl, size(train_spk,2));
-downsampler_act = Downsampler(fs/fsl, size(train_spk,2));
 
 %% Define firing rate estimators
 for m = 1:size(train_spk,2)
@@ -37,30 +25,12 @@ for m = 1:size(train_spk,2)
 end
 
 %% Train the estimator
+set_exact_estimator_parameters = 1;
 if set_exact_estimator_parameters
     estimator.set_exact_parameters(mu_pool.mn_pool, mf_mdl, detectable_ind);
     warning('Estimator''s parameters are manually set to exact values!');
     
 else % Do training on training dataset    
-    % Downsample the training data using online downsampler
-    train_aux_dwns = zeros(size(train_aux));
-    train_act_dwns = zeros(size(train_spk));
-    train_spk_dwns  = zeros(size(train_spk));
-    train_act = spikes2activity(train_spk, length(fe_window)/fsl*fs, 1);
-    
-    for t = 1:size(train_spk,1)
-        train_aux_dwns(t) = downsampler_aux.update(train_aux(t));
-        train_act_dwns(t,:) = downsampler_act.update(train_act(t,:));
-        train_spk_dwns(t,:) = downsampler_spk.update(train_spk(t,:));
-    end
-    
-    train_aux_dwns(isnan(train_aux_dwns(:,1)),:) = [];
-    train_act_dwns(isnan(train_act_dwns(:,1)),:) = [];
-    train_spk_dwns(isnan(train_spk_dwns(:,1)),:) = [];
-    
-    train_act_dwns = double(train_act_dwns > 0);
-    train_spk_dwns = double(train_spk_dwns > 0);
-    
     % Calculate firing rates
     train_fr_dwns = zeros(size(train_spk_dwns));
     for m = 1:size(train_spk_dwns,2)
@@ -88,7 +58,7 @@ else % Do training on training dataset
     fprintf(' Done!\n');
     
     
-    %% Predict of training data
+    %% Predict training data
     train_predicted_dwns = zeros(size(train_aux_dwns));
     switch estimator.type
         case 'RS'

@@ -130,3 +130,4 @@ catch err
 end
     
 cd(current_path);
+clear fe_*

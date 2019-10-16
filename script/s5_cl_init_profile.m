@@ -1,12 +1,12 @@
 %% Generate trapezoidal profile
-profile_len = 15; % simulation time seconds;
+profile_len = 25; % simulation time seconds;
 silence = 1;
-percent_mvc = 75;%
-slope = 5; % percent per second
+percent_mvc = 100;%
+slope = 10; % percent per second
 
-%profile = ContractionProfile(profile_len, fs, 'trapezoidal', percent_mvc/100, slope/100, silence);
+profile = ContractionProfile(profile_len, fs, 'trapezoidal', percent_mvc/100, slope/100, silence);
 %profile = ContractionProfile(profile_len, fs, 'constant', percent_mvc/100);
-profile = ContractionProfile(profile_len, fs, 'ramp', percent_mvc/100, slope/100, silence);
+%profile = ContractionProfile(profile_len, fs, 'ramp', percent_mvc/100, slope/100, silence);
 %profile = ContractionProfile(profile_len, fs, 'rect', percent_mvc/100);
 
 

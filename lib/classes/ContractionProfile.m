@@ -137,6 +137,23 @@ classdef ContractionProfile < handle
                     
                     
                 %case 'free'
+                
+%                 case 'sinusoidal'
+%                     % Get the user's parameters of the profile
+%                     meanval = varargin{1};
+%                     ampl = varargin{2};
+%                     
+%                     obj.maxval = meanval+ampl;
+%                     obj.minval = 0;
+%                     
+%                     if numel(varargin) > 2
+%                         obj.silent = varargin{2};
+%                     else
+%                         obj.silent = 1; %1 second of silence in the beginning and in the end of profile
+%                     end
+%                     obj.len = obj.act_len + 2 * obj.silent;
+                   
+                    
                 otherwise
                     error('Profile generation failed because specified profile isn''t recognized');
             end

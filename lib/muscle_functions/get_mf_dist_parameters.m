@@ -16,11 +16,7 @@ diam_stds = zeros(Nmu, 1);
 for i = 1:Nmu
 %    diam_means(i) = mean_d - std_d + innervation_areas(i) * 2*std_d; % See eq. (9) in the article
     diam_means(i) = mean_d - std_d + cumul_ia(i) * 2*std_d; % I don't know, but the original function worked bad for large number of MUs
-    diam_stds(i) = diam_means(i) * cv/2; % See eq. 11
-    
-    %Sometimes more preferable adjustment:
-    %diam_means(i) = mean_d - std_d + innervation_areas(i) * 6*std_d; % See eq. (9) in the article
-    %diam_stds(i) = diam_means(i) * cv; % See eq. 11
+    diam_stds(i) = diam_means(i) * cv; % See eq. 11
 end
 
 end

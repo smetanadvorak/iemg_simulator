@@ -24,7 +24,7 @@
 % visualization).
 
 %dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/simulated/physiological/data_for_estimator_tests';
-dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/simulated/physiological/virtual_subject_test2';
+dataset_path = '/Users/akmbpro/Nextcloud/EMG Data/simulated/physiological/manuscript/general_simulated_for_illustration';
 
 vs_mdl_file = 'simulation_mdl.mat';
 signals_file = 'simulation_signals.mat';
@@ -77,7 +77,6 @@ for d = 1:numel(dir_list)
     train_emg = [train_emg; zeros(fe_min_pause * fs, size(fe_train_emg,2)); fe_train_emg];
     train_aux = [train_aux; zeros(fe_min_pause * fs, size(fe_train_aux,2)); fe_train_aux];
     train_spk = [train_spk; zeros(fe_min_pause * fs, size(fe_spikes,2)); fe_spikes];
-    train_true_fr = 
     cd ..;
 end
 
@@ -136,3 +135,4 @@ catch err
 end
     
 cd(current_path);
+clear fe_*
