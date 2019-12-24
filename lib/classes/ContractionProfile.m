@@ -68,11 +68,11 @@ classdef ContractionProfile < handle
                     if numel(varargin) > 1
                         obj.silent = varargin{2};
                     else
-                        obj.silent = 1; %1 second of silence in the beginning and in the end of profile
+                        obj.silent = 1; %1 second of silence in the beginning 
                     end
                     obj.len = obj.act_len + obj.silent;
                     
-                    segments = cumsum([0, obj.silent, obj.silent, obj.len]);
+                    segments = cumsum([0, obj.silent, obj.silent+eps, obj.len]);
                     obj.profile = [obj.minval, obj.minval, obj.maxval, obj.maxval];
                     obj.profile = interp1(segments * obj.fs, obj.profile, 1:round(obj.len*obj.fs));
                     obj.profile = obj.profile(:);
@@ -86,7 +86,7 @@ classdef ContractionProfile < handle
                     if numel(varargin) > 2
                         obj.silent = varargin{3};
                     else
-                        obj.silent = 1; %1 second of silence in the beginning and in the end of profile
+                        obj.silent = 1; %1 second of silence in the beginning
                     end
                     obj.len = obj.act_len + obj.silent;
                     
@@ -101,7 +101,7 @@ classdef ContractionProfile < handle
                         slope_len = len - obj.silent;
                     end
                     
-                    plateau_len = max(0, obj.len - 2*(slope_len + obj.silent));
+                    plateau_len = max(0, obj.len - (slope_len + obj.silent));
                     segments = cumsum([0, obj.silent, slope_len, plateau_len+eps]);
                     
                     % Interpolate between nodes
@@ -125,7 +125,7 @@ classdef ContractionProfile < handle
                     
                     % Calculate the nodes of the profile
                     plateau_len = max(0, obj.len - 2*obj.silent);
-                    segments = cumsum([0, obj.silent, 1e-5, plateau_len, 1e-5, obj.silent]);
+                    segments = cumsum([0, obj.silent, eps, plateau_len, eps, obj.silent]);
                     
                     % Interpolate between nodes
                     obj.profile = [obj.minval, obj.minval, obj.maxval, obj.maxval, obj.minval, obj.minval];

@@ -4,7 +4,7 @@ mf_mdl.plot_twitches();
 
 %% Estimate the maximum voluntary contraction, normalize force
 % Define MVC spikes
-mvc_T = 10*fs;
+mvc_T = 10*fs; % Length of the MVC measurement signal
 mvc_excitation = ones(mvc_T,1);
 mvc_spikes = mu_pool.mn_pool.generate_spike_train_gauss(1:mvc_T, nan(mu_pool.mn_pool.N,1), mvc_excitation, fs);
 [mvc_force, ~] = mf_mdl.normalize_mvc(mvc_spikes);

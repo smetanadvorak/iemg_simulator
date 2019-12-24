@@ -53,9 +53,9 @@ classdef MU_Pool_Sim < handle
             
             % Adjust the loaded centers to the expected number of fibers
             % and to muscle radius
-            obj.mf_centers = (obj.mf_centers - 5)/4;
+            obj.mf_centers = (obj.mf_centers - 5)/4; % 4 may be unnecessary here
             [dists, inds] = sort(sqrt(obj.mf_centers(:,1).^2 + obj.mf_centers(:,2).^2));
-            obj.mf_centers = obj.mf_centers(inds(1:obj.Nmf), :) / dists(obj.Nmf+1)*Rmuscle;
+            obj.mf_centers = obj.mf_centers(inds(1:obj.Nmf), :) / dists(obj.Nmf+1) * Rmuscle;
             
             % Create muscle border for plotting
             phi_circle = linspace(0, 2*pi, 1000)';
@@ -248,8 +248,8 @@ classdef MU_Pool_Sim < handle
                 figure;
                 ax = axes();
             end
-            plot(obj.innervation_areas); hold on;
-            plot(obj.innervation_areas_res);
+            plot(obj.innervation_areas, 'r', 'linewidth', 1.5); hold on;
+            bar(obj.innervation_areas_res, 'b');
             %title('Innervation areas of the units and their target values');
             xlim([0.5,obj.N+0.5]); xlabel('Motor neuron'); ylabel('Innervation areas, $mm^2$');
             legend('Target', 'Generated', 'location', 'nw');            

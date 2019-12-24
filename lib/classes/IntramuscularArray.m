@@ -1,7 +1,7 @@
 classdef IntramuscularArray < Electrode
     
     properties
-        step;       % Step of array electrode
+        step;       % Step of array electrode (distance between consecutive electrode positions)
     end
     
     methods
@@ -38,7 +38,7 @@ classdef IntramuscularArray < Electrode
             % Electrode difference matrix
             switch differentiation
                 case 'consecutive'
-                    obj.diff_mat =          eye(size(obj.pts_origin,1)-1,size(obj.pts_origin,1)) -...
+                    obj.diff_mat = eye(size(obj.pts_origin,1)-1,size(obj.pts_origin,1)) -...
                         circshift( eye(size(obj.pts_origin,1)-1,size(obj.pts_origin,1)), 1, 2);
                 case 'reference'
                     obj.diff_mat = circshift( eye(size(obj.pts_origin,1)-1,size(obj.pts_origin,1)), 1, 2);

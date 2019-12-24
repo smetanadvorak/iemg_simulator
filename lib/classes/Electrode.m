@@ -98,6 +98,9 @@ classdef Electrode < handle
             %% What makes the electrode translate: time or force.
             % Normalized parameter (between 0 and 1);
             obj.traj_mixing_fun = @(t, n_nodes, node) max(0, 1 - (n_nodes-1) * abs(t - (node-1)/(n_nodes-1+eps)) );
+            
+            
+            
             obj.traj_mixing_mat = @(t, n_nodes, n_channels) diag(reshape(repmat(obj.traj_mixing_fun(t, n_nodes, 1:n_nodes), obj.n_points, 1), [], 1));
             
         end

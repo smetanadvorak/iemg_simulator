@@ -14,7 +14,7 @@ classdef MU_Sim < handle
         mf_cv; % conduction velocities
         
         % Neuromuscular junctions
-        nmj_z; % zs of neuromuscular junctions;
+        nmj_z; % coordinates of neuromuscular junctions along z axis;
         branch_points_xy;
         branch_points_z;
         nmj_cv; % nerves' branches' conduction velocities (as many values as layers in the model);
@@ -56,7 +56,7 @@ classdef MU_Sim < handle
         %% SFAPs calculation function
         function calc_sfaps(obj, dt, dz, pts_world, pts_normals, min_radial_dist)
             if nargin < 6
-                min_radial_dist = mean(obj.mf_diameters) * 1000; % Get millimeters
+                min_radial_dist = mean(obj.mf_diameters) * 1000; % Get millimeters from micrometers
             end
             obj.Npt = size(pts_world, 1);
             
@@ -65,7 +65,7 @@ classdef MU_Sim < handle
             
             % Get the grid that covers the whole length of fiber and most
             % of the action potential timespan;
-            t = 0:dt:(2 * max([(obj.nmj_z - obj.mf_left_end)./obj.mf_cv ; (obj.mf_right_end - obj.nmj_z)./obj.mf_cv]));
+            t = 0:dt:(2 * max([(obj.nmj_z - obj.mf_left_end)./obj.mf_cv ; (obj.mf_right_end - obj.nmj_z)./obj.mf_cv])); % 2 unnecessary
             t = t';
             obj.sfaps = zeros(numel(t), obj.Npt, obj.Nmf);
             
@@ -83,7 +83,7 @@ classdef MU_Sim < handle
                 
                 for pt = 1:obj.Npt
                     radial_dist = sqrt(sum((pts_world(pt,1:2) - obj.mf_centers(fb,:)).^2));
-                    radial_dist(radial_dist < min_radial_dist) = min_radial_dist;
+                    radial_dist(radial_dist < min_radial_dist) = min_radial_dist; % To avoid division by zero.
                     response_to_elem_current = get_elementary_current_response(z, pts_world(pt,3), radial_dist);
                     %if norm(pts_normals(pt,:)) > 0
                     %    effective_elem_area = get_visible_area(mf_coord_3d, pts_world(pt,:), pts_normals(pt,:));

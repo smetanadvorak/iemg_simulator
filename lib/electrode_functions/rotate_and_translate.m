@@ -4,7 +4,7 @@ function pt = rotate_and_translate( pt, rpy, d )
 
 pt = rodrigues_rot(pt, [1, 0, 0],  rpy(1)); % roll
 pt = rodrigues_rot(pt, [0, 1, 0],  rpy(2)); % pitch
-pt = rodrigues_rot(pt, [0, 0, 1],  rpy(2)); % yaw
+pt = rodrigues_rot(pt, [0, 0, 1],  rpy(3)); % yaw
 
 pt = pt + repmat(d(:)', size(pt,1), 1); % translation
 

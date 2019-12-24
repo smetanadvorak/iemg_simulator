@@ -43,7 +43,7 @@ switch mode
         rtz = rtz * max(rt)/max(rtz);
         
     case 'ls2n'
-        rt = (RM/RR) * exp(i * log(RR) / N);
+        rt = (RM/RR) * exp((i-1) * log(RR) / (N-1));
         % Version starting from zero
         rtz = (RM/RR) * (exp((i-1) * log(RR+1) / N) - 1);
         rtz = rtz * max(rt)/max(rtz);

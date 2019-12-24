@@ -2,7 +2,7 @@ classdef MN_Pool_Sim < handle
     % A class MotorNeuronPool_Sim is a container for the Motor Neuron Pool model
     
     properties
-        motor_neurons;
+        %motor_neurons;
         
         N ; %Number of mus
         rr; %Recruitment range: largest/smallest
@@ -20,9 +20,9 @@ classdef MN_Pool_Sim < handle
         frs;   %Firing rates slope  
         
         % IPI generation parameters
-        CV = 1/6; % Coefficient of variation for gaussian model
+        CV = 1/6; % Coefficient of variation for gaussian model of interspike interval
         
-        exc_fr_curves
+        exc_fr_curves; % Excitation - rate curves of motor neurons
         
     end
     
@@ -119,7 +119,7 @@ classdef MN_Pool_Sim < handle
             fr = transpose(fr); % Columns: excitation; Rows: motor neurons
         end
 
-        %% Firings generation
+        %% Firings generation (Based on Fuglevand 1993)
         function [ spikes, next_state, last_ipi] = generate_spike_train_gauss(obj, T, prev_state, excitation, fs)
             spikes = zeros(numel(T),obj.N);
             ipi = zeros(obj.N,1);

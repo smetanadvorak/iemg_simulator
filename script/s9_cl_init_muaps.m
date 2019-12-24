@@ -3,7 +3,7 @@ nmj_jitter = 35e-6;         % standard deviation, default value is 35e-6;
                         % Taken from Hamilton Stashuk
 
 branch_v = [5000, 2000]; % NMJ branch conduction velocity; [mm/s] 
-                         % 5000mm/s from Yann Pereon
+                         % 5000mm/s from Pr. Yann Pereon
 
                          
                          

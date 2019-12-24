@@ -62,8 +62,8 @@ abs(pole(e2fModel))
 %% Compare the estimated model's output with the estimation data
 figure; 
 %compare(detrend(pid_valid_data), e2fModel);
-plot(sys_valid_data_r.SamplingInstants, sys_ident_data_r.OutputData); hold all;
-pid_pred = predict(e2fModel, sys_ident_data_r, 0);
+plot(sys_valid_data_r.SamplingInstants, sys_valid_data_r.OutputData); hold all;
+pid_pred = predict(e2fModel, sys_valid_data_r, 0); % Check the K value, should be 1? Larger?
 plot(sys_valid_data_r.SamplingInstants, pid_pred.y, '--r');
 xlim([-inf, inf]); ylim([0, 1.2]); xlabel('Time, s'); ylabel('Force, normalized');
 legend('Validation ouput', 'Estimated model output'); 
