@@ -23,13 +23,13 @@ sys_valid_force = mf_mdl.generate_force_offline(sys_valid_spikes);
 
 
 %% Show identification and validation data
-figure; 
-subplot(2,1,1); plot(sys_timeline,sys_ident_force); hold on; 
-plot(sys_timeline,sys_ident_excitation); xlabel('Time, s');
-title('Identification data'); legend('Force', 'Excitation'); axis tight;
-subplot(2,1,2); plot(sys_timeline,sys_valid_force); hold on; 
-plot(sys_timeline,sys_valid_excitation); xlabel('Time, s');
-title('Validation data'); legend('Force', 'Excitation'); axis tight;
+% figure; 
+% subplot(2,1,1); plot(sys_timeline,sys_ident_force); hold on; 
+% plot(sys_timeline,sys_ident_excitation); xlabel('Time, s');
+% title('Identification data'); legend('Force', 'Excitation'); axis tight;
+% subplot(2,1,2); plot(sys_timeline,sys_valid_force); hold on; 
+% plot(sys_timeline,sys_valid_excitation); xlabel('Time, s');
+% title('Validation data'); legend('Force', 'Excitation'); axis tight;
 
 
 %% Set up the system identification data
@@ -56,17 +56,17 @@ sys_valid_data_r = resample(sys_valid_data, 1, round(fs/fsl));
 %e2fModel = arx(detrend(pid_ident_data),[2 1 75/1000 * fs]);
 %e2fModel = oe(detrend(pid_ident_data),[1 2 75/1000 * fs]);
 e2fModel = oe(sys_ident_data_r, [1 1 0]);
-pole(e2fModel)
-abs(pole(e2fModel))
+%pole(e2fModel)
+%abs(pole(e2fModel))
 
 %% Compare the estimated model's output with the estimation data
-figure; 
+%figure; 
 %compare(detrend(pid_valid_data), e2fModel);
-plot(sys_valid_data_r.SamplingInstants, sys_valid_data_r.OutputData); hold all;
+%plot(sys_valid_data_r.SamplingInstants, sys_valid_data_r.OutputData); hold all;
 pid_pred = predict(e2fModel, sys_valid_data_r, 0); % Check the K value, should be 1? Larger?
-plot(sys_valid_data_r.SamplingInstants, pid_pred.y, '--r');
-xlim([-inf, inf]); ylim([0, 1.2]); xlabel('Time, s'); ylabel('Force, normalized');
-legend('Validation ouput', 'Estimated model output'); 
+%plot(sys_valid_data_r.SamplingInstants, pid_pred.y, '--r');
+%xlim([-inf, inf]); ylim([0, 1.2]); xlabel('Time, s'); ylabel('Force, normalized');
+%legend('Validation ouput', 'Estimated model output'); 
 
 %% Set up and tune the PID controller
 %e2fModel = upsample(tf(e2fModel),fsl);
@@ -78,7 +78,7 @@ pidc = pidtune(e2fModel, 'PI', 8);
 pid_test = feedback(pidc*e2fModel, 1);
 
 % Draw step response (maximal excitation)
-figure; step(pid_test);
+%figure; step(pid_test);
 
 
 %% Clear and junk

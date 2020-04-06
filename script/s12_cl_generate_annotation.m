@@ -50,18 +50,18 @@ firings_centered_detectable = spikes2firings(spikes_centered_detectable);
 
 
 %% Plot EMG with spikes
-figure; set(gcf, 'position', [70, 100, 1300, 600]);
-
-separator_step = mean(std(emg)) * 5;
-separator = (1:electrode.n_channels) * separator_step;
-separator = repmat(separator, size(emg,1), 1);
-
-% Plot EMG (separator for multichannel view)
-plot(profile.timeline, emg + separator, 'linewidth', 1.1); hold on;
-plot(profile.timeline, squeeze(sum(spikes_centered_detectable,2)) * std(emg(:)) + separator, 'linewidth', 1.2);
-title(sprintf('Simulated EMG, [V], SNR=%2.2f', SNR));
-xlabel('Time, s'); ylabel('Amplitude, arbitrary units');
-legend('Signal', 'Centered Firings');
+% figure; set(gcf, 'position', [70, 100, 1300, 600]);
+% 
+% separator_step = mean(std(emg)) * 5;
+% separator = (1:electrode.n_channels) * separator_step;
+% separator = repmat(separator, size(emg,1), 1);
+% 
+% % Plot EMG (separator for multichannel view)
+% plot(profile.timeline, emg + separator, 'linewidth', 1.1); hold on;
+% plot(profile.timeline, squeeze(sum(spikes_centered_detectable,2)) * std(emg(:)) + separator, 'linewidth', 1.2);
+% title(sprintf('Simulated EMG, [V], SNR=%2.2f', SNR));
+% xlabel('Time, s'); ylabel('Amplitude, arbitrary units');
+% legend('Signal', 'Centered Firings');
 
 % APs labelling
 % text_level = separator(1,end) + mean(std(emg)) * 5;

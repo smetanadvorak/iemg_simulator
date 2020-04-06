@@ -27,15 +27,15 @@ mu_pool.calc_innervation_numbers_res();
 mu_pool.calc_innervation_areas_res('polygone_area', 0.95); % Parameter defines the way the resulting innervation area is calculated.
                                                            %'root_variance'; %'confidence_ellipse'; 'polygone_area'; 
 
-mu_pool.show_innervation_numbers();
-mu_pool.show_innervation_areas_1d();
+%mu_pool.show_innervation_numbers();
+%mu_pool.show_innervation_areas_1d();
 mu_pool.show_innervation_areas_2d(1:2:N); 
 title('');
 
 %% Generate diameters and conduction velocities
 mu_pool.generate_mf_diameters();
 mu_pool.generate_mf_cvs();
-mu_pool.show_diameters_distribution();
+%mu_pool.show_diameters_distribution();
 
 %%
 

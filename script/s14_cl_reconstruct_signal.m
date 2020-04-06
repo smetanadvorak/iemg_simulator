@@ -25,25 +25,25 @@ end
 
 
 
-figure; set(gcf, 'position', [70, 100, 1300, 600]);
-
-separator_step = mean(std(reconstructed_emg_full)) * 5;
-separator = (1:electrode.n_channels) * separator_step;
-separator = repmat(separator, size(reconstructed_emg_full,1), 1);
-
-% Plot EMG (separator for multichannel view)
-subplot(2,1,1);
-plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
-plot(profile.timeline, reconstructed_emg_detectable + separator, 'linewidth', 1, 'color', 'b'); hold on;
-legend('Original signal', 'Reconstr. from detectable dict.');
-
-subplot(2,1,2);
-plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
-plot(profile.timeline, reconstructed_emg_full + separator, 'linewidth', 1, 'color', 'g'); hold on;
-legend('Original signal', 'Reconstr. from full dict.');
-
-title(sprintf('Reconstructed EMG vs Simulated'));
-xlabel('Time, s'); ylabel('Amplitude, Arbitrary units');
+% figure; set(gcf, 'position', [70, 100, 1300, 600]);
+% 
+% separator_step = mean(std(reconstructed_emg_full)) * 5;
+% separator = (1:electrode.n_channels) * separator_step;
+% separator = repmat(separator, size(reconstructed_emg_full,1), 1);
+% 
+% % Plot EMG (separator for multichannel view)
+% subplot(2,1,1);
+% plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
+% plot(profile.timeline, reconstructed_emg_detectable + separator, 'linewidth', 1, 'color', 'b'); hold on;
+% legend('Original signal', 'Reconstr. from detectable dict.');
+% 
+% subplot(2,1,2);
+% plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
+% plot(profile.timeline, reconstructed_emg_full + separator, 'linewidth', 1, 'color', 'g'); hold on;
+% legend('Original signal', 'Reconstr. from full dict.');
+% 
+% title(sprintf('Reconstructed EMG vs Simulated'));
+% xlabel('Time, s'); ylabel('Amplitude, Arbitrary units');
 
 
 

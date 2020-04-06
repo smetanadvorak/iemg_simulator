@@ -7,27 +7,29 @@ dt = 1/fs; % Sampling period of EMG [s]
 fsl = 50; % Time sampling frequency for force, [Hz]
 dz = 0.5; % Spatial sampling frequency for muscle fibers action potentials [mm]   
 
-%% MU pool
+%% MU pool model
 run s1_cl_init_mn_pool  % Generate the motor neuron pool (defines the muscle geometry,
                         % as well as sizes and innervation centers of the motor neurons)
 run s2_cl_init_mu_pool  % Generate the muscle fibers coordinates, assign the muscle fibers to
                         % the MNs to generate motor units. Assign diameters of fibers. 
 
-%% Muscle
+%% Muscle model
 run s3_cl_init_force_model  % Generate twitch waveforms and non-linearity coefficient (follows Fuglevand 1993)
 run s4_cl_tune_pid          % Identifies the excitation-force model. Establishes a PID controller that outputs the
                             % excitation needed to follow the force profile.
 
-%% MUAPs and EMG (long)
+%% Simulation of MUAPs (may be specifically time-consuming)
 run s8_cl_init_electrode    % Defines the electrode's geometry (form and number of channels) and position in the muscle
 run s9_cl_init_muaps        % Defines the terminal arborization geometry and pre-calculates the MUAPs
 run s10_cl_generate_mvc_emg % Generates the EMG at maximum voluntary contraction, for the noise level reference
 run s17_cl_save_model       % Saves the model to a .m file
 
-%% Contraction
-run s5_cl_init_profile      % Define the contraction profile (trapezoidal or constant, or etc.)
+
+%% Simulation of contraction: force and EMG generation
+run s5_cl_init_profile      % Define the contraction profile (trapezoidal, constant, etc.)
 run s6_cl_generate_force    % Generate the spike trains according to force profile
 run s11_cl_generate_emg     % Generate the EMG out of the spike trains.
+
 
 %% Annotation
 run s12_cl_get_detectable_mus   % Decides which MUAPs are going to the dictionary.

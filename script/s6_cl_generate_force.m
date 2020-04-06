@@ -73,14 +73,14 @@ for t = 1:profile.T-1
 end
 
 %% Plot goal force + resulting force, excitation and error
-figure; hold all; 
-plot(profile.timeline, force * 100,'g', 'linewidth', 1.5); 
-plot(profile.timeline, error * 100, 'r', 'linewidth', 1);
-plot(profile.timeline, profile.profile * 100, 'b--', 'linewidth', 1); 
-
-ylabel('Force, \%MVC');
-xlabel('Time, s');
-legend('Resulting force', 'Error', 'Goal force');%, 'Resulting excitation');
+% figure; hold all; 
+% plot(profile.timeline, force * 100,'g', 'linewidth', 1.5); 
+% plot(profile.timeline, error * 100, 'r', 'linewidth', 1);
+% plot(profile.timeline, profile.profile * 100, 'b--', 'linewidth', 1); 
+% 
+% ylabel('Force, \%MVC');
+% xlabel('Time, s');
+% legend('Resulting force', 'Error', 'Goal force');%, 'Resulting excitation');
 
 
 %% Plot resulting spikes

@@ -9,9 +9,9 @@ mvc_excitation = ones(mvc_T,1);
 mvc_spikes = mu_pool.mn_pool.generate_spike_train_gauss(1:mvc_T, nan(mu_pool.mn_pool.N,1), mvc_excitation, fs);
 [mvc_force, ~] = mf_mdl.normalize_mvc(mvc_spikes);
 
-figure; 
-plot((1:mvc_T)/fs, mvc_force); hold on; title('MVC after normalization');
-ylabel('Force, normalized'); xlabel('Time');
+% figure; 
+% plot((1:mvc_T)/fs, mvc_force); hold on; title('MVC after normalization');
+% ylabel('Force, normalized'); xlabel('Time');
 
 clear mvc_*
 
@@ -29,14 +29,14 @@ qsi_force = mf_mdl.generate_force_offline(qsi_spikes);
 mf_mdl.init_quasistatic_e2f_f2e_models(mu_pool);
 
 %% Plot
-figure;
-plot(qsi_force, qsi_excitation, 'r', 'linewidth', 2); hold on;
-plot(qsi_force, mf_mdl.f2e(qsi_force), 'b', 'linewidth', 2); 
-xlim([0,1]); ylim([0,1]);
-ylabel('Excitation');
-xlabel('Force, normalized');
-%title('Force response to quasistatic linearly increasing excitation and its polynomial fit');
-legend('Simulated excitation-force dependency', 'Weightened 5-th order polynomial fit', 'location', 'nw');
-
+% figure;
+% plot(qsi_force, qsi_excitation, 'r', 'linewidth', 2); hold on;
+% plot(qsi_force, mf_mdl.f2e(qsi_force), 'b', 'linewidth', 2); 
+% xlim([0,1]); ylim([0,1]);
+% ylabel('Excitation');
+% xlabel('Force, normalized');
+% %title('Force response to quasistatic linearly increasing excitation and its polynomial fit');
+% legend('Simulated excitation-force dependency', 'Weightened 5-th order polynomial fit', 'location', 'nw');
+% 
 
 clear qsi_force qsi_excitation qsi_T qsi_spikes

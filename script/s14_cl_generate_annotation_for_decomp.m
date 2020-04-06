@@ -44,18 +44,17 @@ if electrode.n_channels == 1
     plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
     plot(profile.timeline, reconstructed_for_decomp_detectable + separator, 'linewidth', 1, 'color', 'b'); hold on;
     plot(profile.timeline, squeeze(sum(spikes_for_decomp_detectable,2)) * std(emg(:)) + separator, 'linewidth', 1.2);
-    legend('Original signal', 'Reconstr. from detectable dict.');
+    legend('Original signal', 'Reconstr. from detectable dict.', 'Spikes');
     
     subplot(2,1,2);
     plot(profile.timeline, emg + separator, 'k', 'linewidth',1); hold on;
     plot(profile.timeline, reconstructed_for_decomp_full + separator, 'linewidth', 1, 'color', 'g'); hold on;
     plot(profile.timeline, squeeze(sum(spikes_for_decomp_full,2)) * std(emg(:)) + separator, 'linewidth', 1.2);
-    legend('Original signal', 'Reconstr. from full dict.');
+    legend('Original signal', 'Reconstr. from full dict.', 'Spikes');
     
     title(sprintf('Reconstructed EMG vs Simulated'));
     xlabel('Time, s'); ylabel('Amplitude, Arbitrary units');
     
     clear temp*
-    
     
 end
