@@ -1,3 +1,4 @@
+obsolete_nonused/*
 simulation_output/*
 !simulation_output/.gitkeep
 *.m~
