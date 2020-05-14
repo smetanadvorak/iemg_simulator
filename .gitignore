@@ -1,6 +1,6 @@
-.DS_Store
 simulation_output/*
 !simulation_output/.gitkeep
 *.m~
 script/thesis_virtual_subject/*
 dependancies/phymhan-matlab-axis-label-alignment-178fcae/*
+.DS_Store
