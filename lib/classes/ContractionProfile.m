@@ -125,34 +125,35 @@ classdef ContractionProfile < handle
                     
                     % Calculate the nodes of the profile
                     plateau_len = max(0, obj.len - 2*obj.silent);
-                    segments = cumsum([0, obj.silent, eps, plateau_len, eps, obj.silent]);
+                    segments = cumsum([0, obj.silent, 10*eps, plateau_len, 10*eps, obj.silent]);
                     
                     % Interpolate between nodes
                     obj.profile = [obj.minval, obj.minval, obj.maxval, obj.maxval, obj.minval, obj.minval];
-                    [segments, inds] = unique(segments);
-                    obj.profile = obj.profile(inds);
+                    %[segments, inds] = unique(segments);
+                    %obj.profile = obj.profile(inds);
                     
                     obj.profile = interp1(segments * obj.fs, obj.profile, 1:round(obj.len*obj.fs));
                     obj.profile = obj.profile(:);
                     
                     
                 %case 'free'
-                
-%                 case 'sinusoidal'
-%                     % Get the user's parameters of the profile
-%                     meanval = varargin{1};
-%                     ampl = varargin{2};
-%                     
-%                     obj.maxval = meanval+ampl;
-%                     obj.minval = 0;
-%                     
-%                     if numel(varargin) > 2
-%                         obj.silent = varargin{2};
-%                     else
-%                         obj.silent = 1; %1 second of silence in the beginning and in the end of profile
-%                     end
-%                     obj.len = obj.act_len + 2 * obj.silent;
-                   
+                case 'sinusoidal'
+                    % Get the user's parameters of the profile
+                    meanval = varargin{1};
+                    ampl = varargin{2};
+                    n_periods = varargin{3};
+                    
+                    obj.maxval = meanval+ampl;
+                    obj.minval = 0;
+                    
+                    if numel(varargin) > 3
+                        obj.silent = varargin{4};
+                    else
+                        obj.silent = 1; %1 second of silence in the beginning and in the end of profile
+                    end
+                    obj.len = obj.act_len + 2 * obj.silent;
+                    
+                    obj.profile = [zeros(fs*obj.silent,1); meanval + ampl*sin(2 * pi * linspace(0,n_periods, obj.fs*obj.act_len) - pi/2)'; zeros(fs*obj.silent,1)]; 
                     
                 otherwise
                     error('Profile generation failed because specified profile isn''t recognized');
